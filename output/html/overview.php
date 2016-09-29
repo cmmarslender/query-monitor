@@ -23,6 +23,8 @@ class QM_Output_Html_Overview extends QM_Output_Html {
 
 	public function output() {
 
+		global $wp_object_cache;
+
 		$data = $this->collector->get_data();
 
 		$db_query_num   = null;
@@ -43,6 +45,10 @@ class QM_Output_Html_Overview extends QM_Output_Html {
 			$cache_data = $cache->get_data();
 			if ( isset( $cache_data['stats'] ) && isset( $cache_data['cache_hit_percentage'] ) ) {
 				$cache_hit_percentage = $cache_data['cache_hit_percentage'];
+			}
+
+			if ( method_exists( $wp_object_cache, 'stats' ) ) {
+				$cache_stats_raw = $wp_object_cache->stats();
 			}
 		}
 
@@ -119,6 +125,19 @@ class QM_Output_Html_Overview extends QM_Output_Html {
 				__( '%s%% hit rate', 'query-monitor' ),
 				number_format_i18n( $cache_hit_percentage, 1 )
 			) );
+			echo '<br><span class="qm-info">';
+			echo ( $cache_data['ext_object_cache'] )
+				? esc_html__( 'External object cache in use', 'query-monitor' )
+				: esc_html__( 'External object cache not in use', 'query-monitor' );
+			echo '</span>';
+			echo '</td>';
+		}
+
+		// Basically making this work with a different object-cache drop in
+		if ( isset( $cache_stats_raw ) && ! isset( $cache_hit_percentage ) ) {
+			echo '<td>';
+			echo esc_html( $cache_stats_raw );
+
 			echo '<br><span class="qm-info">';
 			echo ( $cache_data['ext_object_cache'] )
 				? esc_html__( 'External object cache in use', 'query-monitor' )
