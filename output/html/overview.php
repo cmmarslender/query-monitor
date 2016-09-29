@@ -136,7 +136,10 @@ class QM_Output_Html_Overview extends QM_Output_Html {
 		// Basically making this work with a different object-cache drop in
 		if ( isset( $cache_stats_raw ) && ! isset( $cache_hit_percentage ) ) {
 			echo '<td>';
-			echo esc_html( $cache_stats_raw );
+
+			echo '<pre>';
+			echo esc_html( print_r( $cache_stats_raw, true ) );
+			echo '</pre>';
 
 			echo '<br><span class="qm-info">';
 			echo ( $cache_data['ext_object_cache'] )
