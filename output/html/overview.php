@@ -46,10 +46,10 @@ class QM_Output_Html_Overview extends QM_Output_Html {
 			if ( isset( $cache_data['stats'] ) && isset( $cache_data['cache_hit_percentage'] ) ) {
 				$cache_hit_percentage = $cache_data['cache_hit_percentage'];
 			}
+		}
 
-			if ( method_exists( $wp_object_cache, 'stats' ) ) {
-				$cache_stats_raw = $wp_object_cache->stats();
-			}
+		if ( function_exists( 'wp_cache_get_stats' ) ) {
+			$cache_stats_raw = wp_cache_get_stats();
 		}
 
 		echo '<div class="qm" id="' . esc_attr( $this->collector->id() ) . '">';
